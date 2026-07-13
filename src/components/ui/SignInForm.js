@@ -3,10 +3,15 @@
 import { FaExclamation } from 'react-icons/fa6';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { authClient } from '@/lib/auth-client';
+import { useState } from 'react';
 
+import toast from 'react-hot-toast';
 import validationSchema from '@/validators/SignInValidator';
 
 export default function SignInForm() {
+    const [loading, setLoading] = useState(false);
+
     const {
         register,
         handleSubmit,
@@ -15,8 +20,29 @@ export default function SignInForm() {
         resolver: zodResolver(validationSchema),
     });
 
-    const handleOnSubmit = (form) => {
-        console.log(form);
+    const handleOnSubmit = async (form) => {
+        setLoading(true);
+
+        const { email, password } = form;
+
+        const { data, error } = await authClient.signIn.email({
+            email,
+            password,
+        });
+
+        if (data?.user) {
+            setLoading(false);
+            console.log(data);
+            toast('Login successfully.');
+            return;
+        }
+
+        if (error) {
+            setLoading(false);
+            console.log(error);
+            toast('Error.');
+            return;
+        }
     };
 
     return (
@@ -60,7 +86,7 @@ export default function SignInForm() {
                     type="submit"
                     className="hover flex w-full cursor-pointer items-center justify-center rounded-full bg-neutral-50 py-2.5 text-base font-medium text-neutral-950 transition-colors duration-200 ease-linear hover:bg-neutral-200"
                 >
-                    Continue
+                    {loading ? 'Continue...' : 'Continue'}
                 </button>
             </form>
         </div>
