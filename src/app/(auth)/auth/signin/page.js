@@ -9,7 +9,7 @@ export default function SigninPage() {
         <div className="flex min-h-screen w-full items-center justify-center bg-neutral-900 px-5 md:px-10">
             <div className="flex w-full max-w-[450px] flex-col items-center justify-center">
                 <div className="mb-5 w-full text-center">
-                    <Link href={'/'}>
+                    <Link href={'/'} className="mx-auto block w-fit">
                         <h1 className="text-lg font-bold text-neutral-50 uppercase">
                             SportNest
                         </h1>
