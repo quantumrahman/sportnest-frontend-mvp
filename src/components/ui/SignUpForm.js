@@ -3,10 +3,15 @@
 import { FaExclamation } from 'react-icons/fa6';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { authClient } from '@/lib/auth-client';
+import { useState } from 'react';
 
+import toast from 'react-hot-toast';
 import validationSchema from '@/validators/SignUpValidator';
 
 export default function SignUpForm() {
+    const [loading, setLoading] = useState(false);
+
     const {
         register,
         handleSubmit,
@@ -15,11 +20,32 @@ export default function SignUpForm() {
         resolver: zodResolver(validationSchema),
     });
 
-    const handleOnSubmit = (form) => {
-        console.log(form);
-    };
+    const handleOnSubmit = async (form) => {
+        setLoading(true);
 
-    console.log(errors);
+        const { name, email, password, image } = form;
+
+        const { data, error } = await authClient.signUp.email({
+            name,
+            email,
+            password,
+            image,
+        });
+
+        if (data?.user) {
+            setLoading(false);
+            toast('Registration successfully.');
+            console.log(data);
+            return;
+        }
+
+        if (error) {
+            setLoading(false);
+            toast('Error.');
+            console.log(error);
+            return;
+        }
+    };
 
     return (
         <div className="w-full">
@@ -98,7 +124,7 @@ export default function SignUpForm() {
                     type="submit"
                     className="hover flex w-full cursor-pointer items-center justify-center rounded-full bg-neutral-50 py-2.5 text-base font-medium text-neutral-950 transition-colors duration-200 ease-linear hover:bg-neutral-200"
                 >
-                    Continue
+                    {loading ? 'Continue...' : 'Continue'}
                 </button>
             </form>
         </div>
