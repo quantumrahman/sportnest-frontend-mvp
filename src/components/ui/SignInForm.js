@@ -8,6 +8,7 @@ import { useState } from 'react';
 
 import toast from 'react-hot-toast';
 import validationSchema from '@/validators/SignInValidator';
+import ToastContent from './ToastContent.js';
 
 export default function SignInForm() {
     const [loading, setLoading] = useState(false);
@@ -32,15 +33,12 @@ export default function SignInForm() {
 
         if (data?.user) {
             setLoading(false);
-            console.log(data);
-            toast('Login successfully.');
             return;
         }
 
         if (error) {
             setLoading(false);
-            console.log(error);
-            toast('Error.');
+            toast.custom(<ToastContent message={error?.message} />);
             return;
         }
     };

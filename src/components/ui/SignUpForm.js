@@ -8,6 +8,7 @@ import { useState } from 'react';
 
 import toast from 'react-hot-toast';
 import validationSchema from '@/validators/SignUpValidator';
+import ToastContent from './ToastContent.js';
 
 export default function SignUpForm() {
     const [loading, setLoading] = useState(false);
@@ -34,15 +35,12 @@ export default function SignUpForm() {
 
         if (data?.user) {
             setLoading(false);
-            toast('Registration successfully.');
-            console.log(data);
             return;
         }
 
         if (error) {
             setLoading(false);
-            toast('Error.');
-            console.log(error);
+            toast.custom(<ToastContent message={error?.message} />);
             return;
         }
     };
