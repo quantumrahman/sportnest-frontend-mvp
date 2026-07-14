@@ -1,10 +1,18 @@
 'use client';
 
+import { FaGoogle } from 'react-icons/fa6';
+import { authClient } from '@/lib/auth-client';
+
 import SignUpForm from '@/components/ui/SignUpForm';
 import Link from 'next/link';
-import { FaGoogle } from 'react-icons/fa6';
 
 export default function SigninPage() {
+    const handleGoogleSignUp = async () => {
+        await authClient.signIn.social({
+            provider: 'google',
+        });
+    };
+
     return (
         <div className="flex min-h-screen w-full items-center justify-center bg-neutral-900 px-5 md:px-10">
             <div className="flex w-full max-w-[450px] flex-col items-center justify-center">
@@ -24,7 +32,10 @@ export default function SigninPage() {
                         sports facilities anytime.
                     </p>
                 </div>
-                <button className="mt-10 flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-neutral-700 py-2.5 text-base font-medium text-neutral-50 transition-colors duration-200 ease-linear hover:bg-neutral-700/20">
+                <button
+                    onClick={handleGoogleSignUp}
+                    className="mt-10 flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-neutral-700 py-2.5 text-base font-medium text-neutral-50 transition-colors duration-200 ease-linear hover:bg-neutral-700/20"
+                >
                     <FaGoogle />
                     Sign in with Google
                 </button>
